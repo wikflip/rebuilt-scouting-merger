@@ -24,6 +24,8 @@ set min_datapoints_per_match 6
 # if the amount of columns in an input file's line is not equal to this, yell and skip
 set column_count 11
 
+set blank_string '^'\t\t\t'0'\t'-1'\t'-1'\t\t'0'\t'0'\t\t
+
 alias md5sum ./.bin/md5sum
 function sum_command
 	read -l tosum
@@ -70,6 +72,11 @@ command ls -1 "$in_dir"*.tsv | while read -l file
 	cat $file | grep -v '^$' | while read -l line
 		set entry_number (math "$entry_number+1")
 		set -l checksum (echo $line | sum_command)
+		if echo $line | grep -E $blank_string &> /dev/null
+			echo -e "Blank found! Hash: $checksum" >> $log_file
+			echo -ne "\r  %  $entry_number/$file_entries"
+			continue
+		end
 	  if test "$(echo $line | xsv headers -d'\t' | wc -l)" != "$column_count"
 			echo -n \r; warn "File '$file' errored @$entry_number, skipping. Hash: $(set_color magenta)$checksum$(set_color white)"; 
 			echo -ne "\r  %  $entry_number/$file_entries"
