@@ -69,7 +69,7 @@ command ls -1 "$in_dir"*.tsv | while read -l file
 	set -l file_entries (cat $file | grep -v '^$' | wc -l)
 	set -l entry_number 0
 
-	cat $file | grep -v '^$' | while read -l line
+	cat $file | grep -v '^$' | sed -e 's/\r//g' | while read -l line
 		set entry_number (math "$entry_number+1")
 		set -l checksum (echo $line | sum_command)
 		if echo $line | grep -E $blank_string &> /dev/null
