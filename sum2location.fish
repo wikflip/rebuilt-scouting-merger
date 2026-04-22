@@ -12,7 +12,7 @@ echo -e "FILE\tLINE\tMATCH_STRING..."
 
 command ls -1 "$in_dir"*.tsv | while read -l file
 	set -l line_num 1
-	cat $file | while read -l line
+	cat $file | sed -e 's/\r//g' | while read -l line
 		set -l checksum (echo $line | sum_command)
 		
 		if test "$checksum" = "$argv"

@@ -7,8 +7,8 @@ set out_dir './OUT/'
 set in_dir './IN/'
 
 set out_file_base $out_dir(date +"%s")
-set out_file "$out_file_base.tsv"
-set out_file_sorted "$out_file_base-sorted.tsv"
+set out_file "$out_file_base-unsorted.tsv"
+set out_file_sorted "$out_file_base.tsv"
 set out_file_csv "$out_file_base-sorted.csv"
 set log_file "$out_file_base.log"
 
@@ -112,5 +112,7 @@ xsv select -d'\t' $match_number_index $out_file_sorted | uniq -c | grep '[0-9]+ 
   end
 end
 
-inform "Exporting CSV"
-xsv input -d'\t' $out_file_sorted > $out_file_csv
+# inform "Exporting CSV"
+# xsv input -d'\t' $out_file_sorted > $out_file_csv
+
+rm $out_file
